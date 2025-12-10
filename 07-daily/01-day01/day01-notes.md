@@ -40,7 +40,7 @@ The Pod with the Always restart policy will restart the container regardless of 
 
 ![Kubernetes Pod with Always restart policy showing continuous container restarts despite successful exit code, with restart count incrementing and backoff delays visible in kubectl output](../00-images/restart-always.png)
 
-## Deliberately Failing Container
+### Deliberately Failing Container with the OnFailure Restart Policy
 
 ```bash
 command: ['sh', '-c', 'echo "Running..."; sleep 5; exit 1']
@@ -48,12 +48,28 @@ command: ['sh', '-c', 'echo "Running..."; sleep 5; exit 1']
 
 This line defines the command that runs inside the container. Breaking it down:
 
-`sh -c` - Starts a shell to execute the command string
-`echo "Running..."` - Prints "Running..." to stdout
-`sleep 5` - Waits for 5 seconds
-`exit 1` - Exits with a non-zero status code (indicating failure)
+- `sh -c` - Starts a shell to execute the command string
+- `echo "Running..."` - Prints "Running..." to stdout
+- `sleep 5` - Waits for 5 seconds
+- `exit 1` - Exits with a non-zero status code (indicating failure)
 
 The commands are chained with semicolons, so they run sequentially. This Pod is designed to fail deliberately (due to exit 1), which is useful for testing how Kubernetes handles failed containers with the Never restart policy - the container will run once, fail after 5 seconds, and won't restart.
+
+This is what happens when we run this pod:
+
+Container starts - Prints "Running..." and sleeps for 5 seconds
+Container fails - Exits with code 1 (failure)
+Kubernetes restarts it - Because restartPolicy: OnFailure means "restart only when container fails"
+Restart loop with backoff - The container will keep failing and restarting, but with exponentially increasing delays between attempts (10s, 20s, 40s, 80s, up to 5 minutes max)
+Status cycles - You'll see the pod status alternate between `Running` → `Error` → `CrashLoopBackOff`
+Restart count increases - Each restart increments the restart counter
+The pod will remain in this `CrashLoopBackOff` state indefinitely, as Kubernetes keeps trying to restart the failing container with backoff delays.
+
+![Kubernetes Pod with OnFailure restart policy displaying kubectl output showing multiple restart-onfailure pod entries with varying restart counts (0-4), status states including Running, Error, and CrashLoopBackOff, and age timestamps ranging from 2 minutes to 2 minutes 15 seconds, illustrating the cyclical failure and restart behavior with exponential backoff delays](../00-images/restart-onfailure.png)
+
+## Never Restart Policy
+
+The Pod with the Never restart policy will not restart the container regardless of its exit code. In the [restart-never.yaml](./restart-never.yaml) example, the container runs a command that exits with code 1 (failure), and Kubernetes will not attempt to restart it.
 
 # The Exponential Back-off Mechanism
 
@@ -61,3 +77,4 @@ When a container fails and the restart policy is set to Always or OnFailure, the
 
 You can see the actual delay times in the pod's status with `kubectl get pod restart-onfailure -o yaml` - look for the containerStatuses section which shows the restart count and backoff state.
 
+> **Production tip**: For jobs, use `restartPolicy: Never` or `OnFailure` to avoid unnecessary restarts. Let the Job controller handle retries by creating new Pods as needed.
