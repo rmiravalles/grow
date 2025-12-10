@@ -34,6 +34,12 @@ It's crucial to remember that the restartPolicy only governs the Kubelet's actio
 
 The three Pods test each restart policy by using a container that exits with different codes. The BusyBox container runs a command to exit with code 0 (success) or code 1 (failure).
 
+## Always Restart Policy
+
+The Pod with the Always restart policy will restart the container regardless of its exit code. In the [restart-always.yaml](./restart-always.yaml) example, the container runs a command that exits with code 0 (success), but Kubernetes will keep restarting it.
+
+![Kubernetes Pod with Always restart policy showing continuous container restarts despite successful exit code, with restart count incrementing and backoff delays visible in kubectl output](../00-images/restart-always.png)
+
 ## Deliberately Failing Container
 
 ```bash
