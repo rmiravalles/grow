@@ -196,3 +196,13 @@ When deciding between `OrderedReady` and `Parallel` Pod management policies, con
 To specify a Pod management policy in a StatefulSet, you can set the `podManagementPolicy` field in the StatefulSet manifest. Here’s an example of a StatefulSet using the OrderedReady policy.
 
 >**Production tip**: Use OrderedReady for stateful systems (Postgres, ZooKeeper, etc.) and switch to Parallel for stateless workloads that only need stable identities.
+
+## 🧪 Commands I Practiced
+
+```bash
+kubectl apply -f statefulset.yaml
+kubectl get pods -l app=nginx -w
+kubectl delete pod web-1 --grace-period=0 --force
+kubectl describe statefulset web | tail -20
+kubectl delete statefulset web
+```
