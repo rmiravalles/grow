@@ -40,10 +40,10 @@ flux --version
 
 ```bash
 flux bootstrap github \
-  --owner=<your-github-username> \
-  --repository=student-notebook \
+  --owner=rmiravalles \
+  --repository=grow \
   --branch=main \
-  --path=./clusters/dev \
+  --path=./clusters/grow \
   --personal
 ```
 
@@ -54,8 +54,8 @@ This command installs all Flux components and connects your Git repo to your clu
 ## ✅ Part 2: Create a GitRepository Source
 
 ```bash
-flux create source git student-notebook \
-  --url=https://github.com/<your-github-username>/student-notebook \
+flux create source git grow \
+  --url=https://github.com/rmiravalles/grow \
   --branch=main \
   --interval=30s
 ```
