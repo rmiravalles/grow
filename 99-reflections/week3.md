@@ -65,6 +65,11 @@ The Pod Security Admission (PSA) Controller is a built-in Kubernetes admission c
 
 `kubectl label namespace default pod-security.kubernetes.io/enforce=restricted --overwrite=true`
 
+When applying the noncompliant Pod:
+
+```bash
+Error from server (Forbidden): error when creating "./restricted-noncompliant-pod.yaml": pods "restricted-noncompliant-pod" is forbidden: violates PodSecurity "restricted:latest": host namespaces (hostPID=true), privileged (container "app" must not set securityContext.privileged=true), allowPrivilegeEscalation != false (container "app" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "app" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "app" must set securityContext.runAsNonRoot=true), runAsUser=0 (container "app" must not set runAsUser=0), seccompProfile (pod or container "app" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+```
 
 ---
 
