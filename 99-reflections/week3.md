@@ -63,6 +63,8 @@ To restrict file system access, several strategies can be employed:
 
 The Pod Security Admission (PSA) Controller is a built-in Kubernetes admission controller (GA since Kubernetes v1.25) that enforces Pod-level security standards at namespace boundaries. It replaces the deprecated PodSecurityPolicy (PSP) mechanism with a simpler, more predictable, and label-based model. The Pod Security Admission Controller ensures that Pods comply with predefined security profiles before they are admitted into the cluster.
 
+`kubectl label namespace default pod-security.kubernetes.io/enforce=restricted --overwrite=true`
+
 
 ---
 
