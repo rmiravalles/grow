@@ -1,20 +1,32 @@
 site_name: My Kubernetes Portfolio
-repo_url: https://rmiravalles.github.io/grow/
+site_url: https://rmiravalles.github.io/grow/
 theme:
   name: material
   palette:
-    - scheme: default
-      primary: deep purple
-      accent: teal
+    - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/eye
-        name: Switch to dark mode
-    - scheme: slate
-      primary: deep purple
-      accent: teal
-      toggle:
-        icon: material/eye-outline
+        icon: material/link
         name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  icon:
+    logo: logo
 
 plugins: 
   - search
