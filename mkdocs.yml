@@ -1,20 +1,23 @@
 site_name: My Kubernetes Portfolio
-site_url: https://rmiravalles.github.io/grow/
+repo_url: https://rmiravalles.github.io/grow/
 theme:
   name: material
   palette:
     - scheme: default
-      primary: blue
-      accent: cyan
+      primary: deep purple
+      accent: teal
       toggle:
-        icon: material/brightness-7
+        icon: material/eye
         name: Switch to dark mode
     - scheme: slate
-      primary: blue
-      accent: cyan
+      primary: deep purple
+      accent: teal
       toggle:
-        icon: material/brightness-4
+        icon: material/eye-outline
         name: Switch to light mode
+
+plugins: 
+  - search
 
 nav:
   - Home: index.md
