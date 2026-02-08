@@ -20,8 +20,8 @@ Each section of this site contains:
 
 ## 🗓️ Daily Notes
 
-- [Day 01](07-daily/01-day01/day01-notes.md)
-- [Day 02](07-daily/02-day02/day02-notes.md)
+- [Day 01: Pod Restart Policies](07-daily/01-day01/day01-notes.md)
+- [Day 02: StatefulSet Pod Ordering](07-daily/02-day02/day02-notes.md)
 
 
 ## 🌐 Built with [MkDocs](https://www.mkdocs.org/) and hosted on GitHub Pages
