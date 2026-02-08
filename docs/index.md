@@ -15,12 +15,12 @@ Each section of this site contains:
 
 ## 📂 What's Inside
 
-- [Getting Started](../00-getting-started/lab-notes.md) — Initial setup and learning environment
-- [Kubernetes Fundamentals](../01-kubernetes-fundamentals/lab-guide.md) — Pods, Deployments, and YAML basics
-- [GitOps](../02-gitops/lab-guide.md) — FluxCD installation and repository automation
-- [Security](../03-security/lab-guide.md) — PodSecurityPolicies, NetworkPolicies, and hardening techniques
-- [Weekly Reflections](../99-reflections/README.md) — Personal takeaways, challenges, and growth areas
-- [Daily Notes](../07-daily/README.md) — Day-by-day learning journal
+- [Getting Started](00-getting-started/lab-notes.md) — Initial setup and learning environment
+- [Kubernetes Fundamentals](01-kubernetes-fundamentals/lab-guide.md) — Pods, Deployments, and YAML basics
+- [GitOps](02-gitops/lab-guide.md) — FluxCD installation and repository automation
+- [Security](03-security/lab-guide.md) — PodSecurityPolicies, NetworkPolicies, and hardening techniques
+- [Weekly Reflections](99-reflections/README.md) — Personal takeaways, challenges, and growth areas
+- [Daily Notes](07-daily/README.md) — Day-by-day learning journal
 
 ---
 
