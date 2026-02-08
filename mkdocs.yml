@@ -32,5 +32,5 @@ markdown_extensions:
   - footnotes
   - tables
 
-repo_url: https://github.com/kubeskills/student-notebook
+repo_url: https://github.com/rmiravalles/grow
 edit_uri: edit/main/docs/

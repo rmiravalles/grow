@@ -21,17 +21,21 @@ Each section of this site contains:
 
 ---
 
+[Week 1 reflection](99-reflections/week1.md)
+[Week 2 reflection](99-reflections/week2.md)
+[Week 3 reflection](99-reflections/week3.md)
+
 # ✅ Week 1: Kubernetes Fundamentals
 
-This week, I worked through the Kubernetes fundamentals lab where I deployed a basic NGINX web server using both a Pod and a Deployment. I also learned about security contexts and how to scale workloads. You can read my detailed reflection on Week 1 [here](./99-reflections/week1.md).
+This week, I worked through the Kubernetes fundamentals lab where I deployed a basic NGINX web server using both a Pod and a Deployment. I also learned about security contexts and how to scale workloads. You can read my detailed reflection on Week 1 [here](99-reflections/week1.md).
 
 # ✅ Week 2: GitOps with FluxCD
 
-I still need to finish the tasks for this week I started setting up FluxCD to automate the deployment of my applications from a Git repository, but I sill need to finish the process. I took a few notes, though, and you can find them [here](./99-reflections/week2.md).
+I still need to finish the tasks for this week I started setting up FluxCD to automate the deployment of my applications from a Git repository, but I sill need to finish the process. I took a few notes, though, and you can find them [here](99-reflections/week2.md).
 
 # ✅ Week 3: Security Best Practices
 
-This week, I learned about Kubernetes security best practices. As for the previous week, I still need to dive deeper here. I want to add more content about the suggested security tools **Falco** and **Kyverno**. You can read more about it in my reflection [here](./99-reflections/week3.md).
+This week, I learned about Kubernetes security best practices. As for the previous week, I still need to dive deeper here. I want to add more content about the suggested security tools **Falco** and **Kyverno**. You can read more about it in my reflection [here](99-reflections/week3.md).
 
 
 ## 🌐 Built with [MkDocs](https://www.mkdocs.org/) and hosted on GitHub Pages
