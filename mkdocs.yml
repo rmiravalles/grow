@@ -3,8 +3,18 @@ site_url: https://rmiravalles.github.io/grow/
 theme:
   name: material
   palette:
-    primary: blue
-    accent: cyan
+    - scheme: default
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
 
 nav:
   - Home: index.md

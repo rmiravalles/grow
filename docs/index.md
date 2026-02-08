@@ -1,6 +1,8 @@
 # 👋 Welcome to My Kubernetes Learning Portfolio
 
-This site documents my journey through the **KubeSkills GROW program** (GitHub Repository of Work), where I'm learning and applying real-world Kubernetes skills.
+Here I'll document my journey through the [KubeSkills GROW program](https://kubeskills.com/grow/) (GitHub Repository of Work). You'll find my notes, reflections, and hands-on exercises, as well as the [Daily Kubeskills challenges](https://daily.kubeskills.com/).
+
+I'll do my best to be as consistent as possible.
 
 Each section of this site contains:
 
@@ -13,12 +15,12 @@ Each section of this site contains:
 
 ## 📂 What's Inside
 
-- **Getting Started** — Initial setup and learning environment
-- **Kubernetes Fundamentals** — Pods, Deployments, and YAML basics
-- **GitOps** — FluxCD installation and repository automation
-- **Security** — PodSecurityPolicies, NetworkPolicies, and hardening techniques
-- **Weekly Reflections** — Personal takeaways, challenges, and growth areas
-- **Daily Notes** — Day-by-day learning journal
+- [Getting Started](./00-getting-started/lab-notes.md) — Initial setup and learning environment
+- [Kubernetes Fundamentals](./01-kubernetes-fundamentals/lab-guide.md) — Pods, Deployments, and YAML basics
+- [GitOps](./02-gitops/lab-guide.md) — FluxCD installation and repository automation
+- [Security](./03-security/lab-guide.md) — PodSecurityPolicies, NetworkPolicies, and hardening techniques
+- [Weekly Reflections](./99-reflections/README.md) — Personal takeaways, challenges, and growth areas
+- [Daily Notes](./07-daily/README.md) — Day-by-day learning journal
 
 ---
 
