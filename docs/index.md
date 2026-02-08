@@ -6,29 +6,13 @@ I'll do my best to be as consistent as possible.
 
 Each section of this site contains:
 
-- ✅ Hands-on labs with YAML and `kubectl`
-- 🧠 Weekly reflections on what I’ve learned
-- 🔐 Security-focused best practices
-- 🚀 GitOps workflows and cluster automation
-
----
-
-## 📂 What's Inside
-
-- [Getting Started](00-getting-started/lab-notes.md) — Initial setup and learning environment
-- [Kubernetes Fundamentals](01-kubernetes-fundamentals/lab-guide.md) — Pods, Deployments, and YAML basics
-- [GitOps](02-gitops/lab-guide.md) — FluxCD installation and repository automation
-- [Security](03-security/lab-guide.md) — PodSecurityPolicies, NetworkPolicies, and hardening techniques
-- [Weekly Reflections](99-reflections/README.md) — Personal takeaways, challenges, and growth areas
-- [Daily Notes](07-daily/README.md) — Day-by-day learning journal
-
 ---
 
 ## 📘 Reflections
 
-- [Week 1 Reflection](99-reflections/week1.md)
-- [Week 2 Reflection](99-reflections/week2.md)
-- [Week 3 Reflection](99-reflections/week3.md)
+- [Week 1: Kubernetes Fundamentals](99-reflections/week1.md)
+- [Week 2: GitOps](99-reflections/week2.md)
+- [Week 3: Security](99-reflections/week3.md)
 - [Week 4 Reflection](99-reflections/week4.md)
 - [Week 5 Reflection](99-reflections/week5.md)
 - [Week 6 Reflection](99-reflections/week6.md)
