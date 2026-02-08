@@ -28,7 +28,8 @@ theme:
   icon:
     logo: logo
 
-plugins: 
+plugins:
+  - blog
   - search
 
 nav:
