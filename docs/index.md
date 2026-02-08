@@ -18,6 +18,7 @@ Each section of this site contains:
 - **GitOps** — FluxCD installation and repository automation
 - **Security** — PodSecurityPolicies, NetworkPolicies, and hardening techniques
 - **Weekly Reflections** — Personal takeaways, challenges, and growth areas
+- **Daily Notes** — Day-by-day learning journal
 
 ---
 
