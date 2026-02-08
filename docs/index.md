@@ -34,9 +34,8 @@ Each section of this site contains:
 
 ## 🗓️ Daily Notes
 
-- [Day 01](07-daily/01-day01)
-- [Day 02](07-daily/02-day02)
-- [Day 03](07-daily/03-day03)
+- [Day 01](07-daily/01-day01/day01-notes.md)
+- [Day 02](07-daily/02-day02/day02-notes.md)
 
 
 ## 🌐 Built with [MkDocs](https://www.mkdocs.org/) and hosted on GitHub Pages
