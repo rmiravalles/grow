@@ -29,7 +29,7 @@ This week, I worked through the Kubernetes fundamentals lab where I deployed a b
 
 I still need to finish the tasks for this week I started setting up FluxCD to automate the deployment of my applications from a Git repository, but I sill need to finish the process. I took a few notes, though, and you can find them [here](./99-reflections/week2.md).
 
-#✅ Week 3: Security Best Practices
+# ✅ Week 3: Security Best Practices
 
 This week, I learned about Kubernetes security best practices. As for the previous week, I still need to dive deeper here. I want to add more content about the suggested security tools **Falco** and **Kyverno**. You can read more about it in my reflection [here](./99-reflections/week3.md).
 
