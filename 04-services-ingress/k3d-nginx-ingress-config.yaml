@@ -1,0 +1,38 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: nginx-cluster
+
+servers: 1
+agents: 2
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+
+options:
+  k3s:
+    extraArgs:
+      # Disable Traefik
+      - arg: "--disable=traefik"
+        nodeFilters:
+          - server:*
+
+      # Optional: Disable servicelb if you prefer NodePort-only behavior
+      - arg: "--disable=servicelb"
+        nodeFilters:
+          - server:*
+
+      # Allow localhost SAN for TLS
+      - arg: "--tls-san=localhost"
+        nodeFilters:
+          - server:*
+
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true

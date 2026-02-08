@@ -1,0 +1,38 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: local-https
+
+servers: 1
+agents: 1
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+
+options:
+  k3s:
+    extraArgs:
+      # Disable default Traefik
+      - arg: "--disable=traefik"
+        nodeFilters:
+          - server:*
+
+      # Optional but recommended for ingress setups
+      - arg: "--disable=servicelb"
+        nodeFilters:
+          - server:*
+
+      # TLS SAN for localhost
+      - arg: "--tls-san=localhost"
+        nodeFilters:
+          - server:*
+
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true

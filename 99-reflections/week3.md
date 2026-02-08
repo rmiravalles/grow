@@ -1,7 +1,6 @@
 # Week 3 Reflection – Kubernetes Security
 
-This week, I worked through the Kubernetes security lab focused on applying `securityContext` settings and exploring pod-level hardening techniques. I also learned about optional security admission and runtime tools like Kyverno and Falco.
-
+This week, I worked through the Kubernetes security lab focused on applying `securityContext` settings and exploring Pod-level hardening techniques. I also learned about optional security admission and runtime tools like Kyverno and Falco.
 
 ---
 
@@ -65,7 +64,7 @@ The Pod Security Admission (PSA) Controller is a built-in Kubernetes admission c
 
 `kubectl label namespace default pod-security.kubernetes.io/enforce=restricted --overwrite=true`
 
-When applying the noncompliant Pod:
+When trying to apply the noncompliant Pod:
 
 ```bash
 Error from server (Forbidden): error when creating "./restricted-noncompliant-pod.yaml": pods "restricted-noncompliant-pod" is forbidden: violates PodSecurity "restricted:latest": host namespaces (hostPID=true), privileged (container "app" must not set securityContext.privileged=true), allowPrivilegeEscalation != false (container "app" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "app" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "app" must set securityContext.runAsNonRoot=true), runAsUser=0 (container "app" must not set runAsUser=0), seccompProfile (pod or container "app" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
@@ -86,20 +85,15 @@ Error from server (Forbidden): error when creating "./restricted-noncompliant-po
 ## 🧪 Commands I Practiced
 
 ```bash
-
-
-
-
+kubectl label namespace default pod-security.kubernetes.io/enforce=baseline
+kubectl label namespace default pod-security.kubernetes.io/enforce=restricted --overwrite=true
 ```
 
 ---
 
 ## 🔐 Security Awareness Gained
 
--
-- 
-- 
-- 
+After enforcing the `baseline` Pod Security standard on the `default` namespace, and trying to create the secure pod without `runAsNonRoot`, I still could create it. I then switched to `restricted`, and the Pod creation failed as expected.
  
 
 ---
