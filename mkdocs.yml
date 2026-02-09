@@ -51,6 +51,11 @@ nav:
       - Week 3: 99-reflections/week3.md
 
 markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - toc:
       permalink: true
   - admonition
