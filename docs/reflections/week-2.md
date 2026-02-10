@@ -1,6 +1,6 @@
 # Week 2 Reflection – GitOps with FluxCD
 
-This week, I set up GitOps in my cluster using **FluxCD**. I bootstrapped my own repository, created a Git source and a Kustomization, and learned how declarative workflows can automate and standardize Kubernetes operations.
+This week, I set up GitOps in my Kubernetes cluster using **FluxCD**. I bootstrapped my own repository, created a Git source and a Kustomization, and learned how declarative workflows can automate and standardize Kubernetes operations.
 
 ---
 

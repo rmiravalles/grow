@@ -36,11 +36,11 @@ This week, I worked through the Kubernetes fundamentals lab where I deployed a b
 Deployment
     └── ReplicaSet
           └── Pod
-  ```
+```
 
 We can easily identify which resources are managed by a Deployment by looking at their names. The name of the ReplicaSet and Pods will include the name of the Deployment as a prefix, followed by a unique identifier.
 
-![Deployment](./images/deployment.png)
+![Deployment](./assets/deployment.png)
 
 ## The kubectl apply Command
 
@@ -105,9 +105,7 @@ Once set, the kernel prevents any exec'd process from gaining additional privile
 
 ## ❓ What Was Challenging
 
-- The security contexts were a new concept for me, and I had to read the documentation and consult different resources to understand how they work.
-- 
-- 
+- The security contexts were a new concept for me, and I had to do some research and consult different resources to understand how they work.
 
 ---
 
@@ -129,15 +127,66 @@ kubectl delete pod nginx-pod
 ## 📝 Questions I Still Have
 
 - I still need to brush up on my Linux skills to better understand how security contexts work.
-- 
-- 
 
 ---
 
-## 📎 Related YAMLs
+## 📎 Related files
 
-- `nginx-pod.yaml`
-- `nginx-deployment.yaml`
+### `nginx-pod.yaml`
+
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginxinc/nginx-unprivileged:stable
+      ports:
+        - containerPort: 80
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "200m"
+```
+
+### `nginx-deployment.yaml`
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginxinc/nginx-unprivileged:stable
+          ports:
+            - containerPort: 80
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+```
 
 ---
 

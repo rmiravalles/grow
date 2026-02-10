@@ -50,6 +50,26 @@ To create a cluster with a config file, use:
 k3d cluster create --config k3d-config.yaml
 ```
 
+See below for the content of `k3d-config.yaml`:
+
+```yaml
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: grow-cluster
+image: rancher/k3s:v1.33.6-k3s1
+servers: 1
+agents: 2
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+```
+
 This cluster has one control-plane node and two worker nodes, as defined in the `k3d-config.yaml` file. In K3D, they are called `server` and `agent` nodes, respectively.
 
 > **Note**: Here I had to enforce the Kubernetes version, because if I simply created a cluster without specifying the version, I got Kubernetes 1.31, which was not compatible with Flux. When running `flux check --pre`, the check didn't pass because of the Kubernetes version. Now it works.
@@ -77,10 +97,6 @@ Delete it:
 ```bash
 kubectl delete pod nginx
 ```
-
 ---
 
-## 🎯 Next Step
 
-When ready, move on to your first official lab:  
-👉 [Kubernetes Fundamentals – Deploying a Pod and Deployment](../01-kubernetes-fundamentals/lab-guide.md)

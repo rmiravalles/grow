@@ -8,7 +8,7 @@ Here I'll document my journey through the [KubeSkills GROW program](https://kube
 
 I'll do my best to be as consistent as possible.
 
-Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Notes** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
+Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Challenges** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
 
 ## 🧪 Getting Started
 
@@ -26,7 +26,7 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 
 ### Week 1
 
-- [Day 1: Kubernetes Pod Restart Policies](daily/week-1/day-01.md)
+- [Day 1: Kubernetes Pod Restart Policies](daily/day-1.md)
 
 
 
