@@ -40,7 +40,7 @@ Deployment
 
 We can easily identify which resources are managed by a Deployment by looking at their names. The name of the ReplicaSet and Pods will include the name of the Deployment as a prefix, followed by a unique identifier.
 
-![Deployment](./assets/deployment.png)
+![Deployment](../assets/deployment.png)
 
 ## The kubectl apply Command
 
@@ -132,7 +132,7 @@ kubectl delete pod nginx-pod
 
 ## 📎 Related files
 
-### `nginx-pod.yaml`
+### nginx-pod.yaml
 
 ```yml
 apiVersion: v1
@@ -159,7 +159,7 @@ spec:
           cpu: "200m"
 ```
 
-### `nginx-deployment.yaml`
+### nginx-deployment.yaml
 
 ```yml
 apiVersion: apps/v1

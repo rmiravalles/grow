@@ -39,7 +39,7 @@ The three Pods test each restart policy by using a container that exits with dif
 
 The Pod with the Always restart policy will restart the container regardless of its exit code. In the [restart-always.yaml](./restart-always.yaml) example, the container runs a command that exits with code 0 (success), but Kubernetes will keep restarting it.
 
-![Kubernetes Pod with Always restart policy showing continuous container restarts despite successful exit code, with restart count incrementing and backoff delays visible in kubectl output](../00-images/restart-always.png)
+![Kubernetes Pod with Always restart policy showing continuous container restarts despite successful exit code, with restart count incrementing and backoff delays visible in kubectl output](../assets/restart-always.png)
 
 ### Deliberately Failing Container with the OnFailure Restart Policy
 
@@ -70,7 +70,7 @@ The pod will remain in this `CrashLoopBackOff` state indefinitely, as Kubernetes
 
 ## Never Restart Policy
 
-The Pod with the Never restart policy will not restart the container regardless of its exit code. In the [restart-never.yaml](./restart-never.yaml) example, the container runs a command that exits with code 1 (failure), and Kubernetes will not attempt to restart it.
+The Pod with the Never restart policy will not restart the container regardless of its exit code. In the `restart-never.yaml` example, the container runs a command that exits with code 1 (failure), and Kubernetes will not attempt to restart it.
 
 # The Exponential Back-off Mechanism
 
@@ -79,3 +79,37 @@ When a container fails and the restart policy is set to Always or OnFailure, the
 You can see the actual delay times in the pod's status with `kubectl get pod restart-onfailure -o yaml` - look for the containerStatuses section which shows the restart count and backoff state.
 
 > **Production tip**: For jobs, use `restartPolicy: Never` or `OnFailure` to avoid unnecessary restarts. Let the Job controller handle retries by creating new Pods as needed.
+
+## 📎 Related files
+
+### restart-always.yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restart-always
+spec:
+  restartPolicy: Always
+  containers:
+    - name: fail-container
+      image: busybox
+      command: ['sh', '-c', 'echo "Running..."; sleep 5; exit 0']
+```
+
+### restart-never.yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restart-never
+spec:
+  restartPolicy: Never
+  containers:
+    - name: fail-container
+      image: busybox
+      command: ['sh', '-c', 'echo "Running..."; sleep 5; exit 1']
+```
+
+
