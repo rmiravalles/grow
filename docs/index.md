@@ -10,7 +10,7 @@ I'll do my best to be as consistent as possible.
 
 Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Notes** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
 
-## Getting Started
+## 🧪 Getting Started
 
 For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), instead of [Kind](https://kind.sigs.k8s.io/), the one suggested in the curriculum.
 
@@ -21,6 +21,12 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 - [Week 1: Kubernetes Fundamentals](reflections/week-1.md)
 - [Week 2: GitOps](reflections/week-2.md)
 - [Week 3: Security](reflections/week-3.md)
+
+## 🗒️ Daily Challenges
+
+### Week 1
+
+- [Day 1: Kubernetes Pod Restart Policies](daily/week-1/day-01.md)
 
 
 
