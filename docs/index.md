@@ -11,6 +11,9 @@ I'll do my best to be as consistent as possible.
 Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Notes** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
 
 ## Getting Started
+
+For my Kubernetes learning environment, I chose to use K3D, instead of Kind, the one suggested in the curriculum.
+
 - [Setting Up My Kubernetes Environment](reflections/getting-started.md)
 
 ## 📘 Reflections
