@@ -12,7 +12,7 @@ Under **Reflections** you'll find my weekly summaries, exercises, and insights, 
 
 ## Getting Started
 
-For my Kubernetes learning environment, I chose to use K3D, instead of Kind, the one suggested in the curriculum.
+For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), instead of [Kind](https://kind.sigs.k8s.io/), the one suggested in the curriculum.
 
 - [Setting Up My Kubernetes Environment](reflections/getting-started.md)
 
