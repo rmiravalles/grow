@@ -1,0 +1,57 @@
+site_name: My Kubernetes Grow portfolio
+site_url: https://rmiravalles.github.io/grow/
+repo_url: https://github.com/rmiravalles/grow
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/link
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/favicon.png
+  icon:
+    logo: logo
+
+plugins:
+  - blog
+  - search
+  - tags
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - toc:
+      permalink: true
+  - admonition
+  - codehilite
+  - footnotes
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started: reflections/getting-started.md
+  - Reflections:
+    - Week 1: reflections/week-1.md
+    - Week 2: reflections/week-2.md
+    - Week 3: reflections/week-3.md
