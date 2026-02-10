@@ -1,4 +1,4 @@
-# 🧪 Getting Started - Setting up my Kubernetes environment
+# 🧪 Getting Started - Setting up my Kubernetes development environment
 
 Welcome! This is your first notebook entry in the GROW program.  
 Use this space to document the setup of your **Kubernetes learning environment** and reflect on what you’re configuring.
