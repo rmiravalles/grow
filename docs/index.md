@@ -26,7 +26,8 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 
 ### Week 1
 
-- [Day 1: Kubernetes Pod Restart Policies](daily/day-1.md)
+- [Day 1: Kubernetes Pod Restart Policies](daily/day-01.md)
+- [Day 2: StatefulSets](daily/day-02.md)
 
 
 
