@@ -10,9 +10,11 @@ I'll do my best to be as consistent as possible.
 
 Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Notes** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
 
+## Getting Started
+- [Setting Up My Kubernetes Environment](reflections/getting-started.md)
+
 ## 📘 Reflections
 
-- [Get Started: Setting Up My Kubernetes Environment](reflections/getting-started.md)
 - [Week 1: Kubernetes Fundamentals](reflections/week-1.md)
 - [Week 2: GitOps](reflections/week-2.md)
 - [Week 3: Security](reflections/week-3.md)
