@@ -21,6 +21,7 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 - [Week 1: Kubernetes Fundamentals](reflections/week-1.md)
 - [Week 2: GitOps](reflections/week-2.md)
 - [Week 3: Security](reflections/week-3.md)
+- [Week 4: Services and Ingress](reflections/week-4.md)
 
 ## 🗒️ Daily Challenges
 

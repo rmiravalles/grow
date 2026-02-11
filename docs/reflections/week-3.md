@@ -108,7 +108,7 @@ How would I use these security settings in production?
 
 ## 📎 Related Files
 
-### `secure-pod.yaml`
+### secure-pod.yaml
 
 ```yaml
 apiVersion: v1
@@ -131,6 +131,65 @@ spec:
         capabilities:
           drop:
             - ALL
+```
+
+### pod-security-context.yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsNonRoot: true
+  containers:
+    - name: secure-container
+      image: busybox
+      command: ["sleep", "3600"]
+```
+
+### restricted-compliant-pod.yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restricted-compliant-pod
+spec:
+  securityContext:
+    runAsNonRoot: true
+  containers:
+    - name: app
+      image: busybox:1.36
+      command: ["sh", "-c", "sleep 3600"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsUser: 1000
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
+```
+
+### restricted-noncompliant-pod.yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: restricted-noncompliant-pod
+spec:
+  hostPID: true
+  containers:
+    - name: app
+      image: busybox:1.36
+      command: ["sh", "-c", "sleep 3600"]
+      securityContext:
+        privileged: true
+        runAsUser: 0
+        allowPrivilegeEscalation: true
 ```
 
 ---
