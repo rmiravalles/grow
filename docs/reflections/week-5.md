@@ -358,6 +358,8 @@ After the Pod restarted, I used the [MongoDB Shell](https://www.mongodb.com/try/
 
 ![shell](../assets/mongodbshell.png)
 
+And there is Mr. Jimmy James!
+
 ## But there's more!
 
 I want to go back here and add more reflections.
