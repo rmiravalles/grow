@@ -334,7 +334,7 @@ spec:
 
 ## Making changes to the Database
 
-To check of the `PVC` was working and storing the data properly, I added an entry to the Database and then killed the Pod. The `ReplicaSet` kicked in and created a new Pod.
+To check if the `PVC` was working and storing the data properly, I added an entry to the Database and then killed the Pod. The `ReplicaSet` kicked in and created a new Pod.
 
 ### Adding a new entry to the Database
 
