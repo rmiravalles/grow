@@ -22,6 +22,7 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 - [Week 2: GitOps](reflections/week-2.md)
 - [Week 3: Security](reflections/week-3.md)
 - [Week 4: Services and Ingress](reflections/week-4.md)
+- [Week 5: Use PersistentVolumeClaims to Run a Stateful App](reflections/week-5.md)
 
 ## 🗒️ Daily Challenges
 

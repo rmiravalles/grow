@@ -23,8 +23,13 @@ By the end of this lab, you will:
   1. Use [kind-config.yaml](kind-config.yaml) provided in this repo:
      ```bash
      kind create cluster --config kind-config.yaml --name grow-lab
+
+  2. To switch the context to the Kind cluster:
+ 
      ```
-  2. Install the NGINX Ingress Controller:
+     k cluster-info --context kind-dev-cluster
+
+  3. Install the NGINX Ingress Controller:
      ```bash
      kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.4/deploy/static/provider/kind/deploy.yaml
      ```

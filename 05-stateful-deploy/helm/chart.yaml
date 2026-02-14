@@ -1,0 +1,13 @@
+apiVersion: v2
+name: mongodb
+description: A Helm chart for MongoDB with sample database initialization
+type: application
+version: 1.0.0
+appVersion: "latest"
+keywords:
+  - mongodb
+  - database
+  - nosql
+maintainers:
+  - name: Rodrigo Miravalles
+    email: miravalles@gmail.com

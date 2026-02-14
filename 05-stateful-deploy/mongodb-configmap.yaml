@@ -1,0 +1,121 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-init-script
+data:
+  init-mongo.js: |
+    // This script runs automatically when MongoDB starts for the first time
+    // It creates a sample database with collections and data
+    
+    db = db.getSiblingDB('sampledb');
+    
+    // Create a users collection with sample data
+    db.users.insertMany([
+      {
+        name: "John Doe",
+        email: "john.doe@example.com",
+        age: 30,
+        role: "developer",
+        created_at: new Date()
+      },
+      {
+        name: "Jane Smith",
+        email: "jane.smith@example.com",
+        age: 28,
+        role: "designer",
+        created_at: new Date()
+      },
+      {
+        name: "Bob Johnson",
+        email: "bob.johnson@example.com",
+        age: 35,
+        role: "manager",
+        created_at: new Date()
+      },
+      {
+        name: "Sandy Saunders",
+        email: "sandy.saunders@example.com",
+        age: 27,
+        role: "DB Admin",
+        created_at: new Date()
+      }
+    ]);
+    
+    // Create a products collection with sample data
+    db.products.insertMany([
+      {
+        name: "Laptop",
+        category: "Electronics",
+        price: 999.99,
+        stock: 50,
+        description: "High-performance laptop for professionals",
+        created_at: new Date()
+      },
+      {
+        name: "Wireless Mouse",
+        category: "Electronics",
+        price: 29.99,
+        stock: 200,
+        description: "Ergonomic wireless mouse",
+        created_at: new Date()
+      },
+      {
+        name: "Office Chair",
+        category: "Furniture",
+        price: 299.99,
+        stock: 30,
+        description: "Comfortable ergonomic office chair",
+        created_at: new Date()
+      },
+      {
+        name: "Desk Lamp",
+        category: "Furniture",
+        price: 49.99,
+        stock: 100,
+        description: "LED desk lamp with adjustable brightness",
+        created_at: new Date()
+      },
+      {
+        name: "Sweatshirt",
+        category: "Apparel",
+        price: 23.49,
+        stock: 70,
+        description: "Long-sleeved high quality cotton garment",
+        created_at: new Date()
+      }
+    ]);
+    
+    // Create a orders collection with sample data
+    db.orders.insertMany([
+      {
+        user_email: "john.doe@example.com",
+        products: [
+          { name: "Laptop", quantity: 1, price: 999.99 },
+          { name: "Wireless Mouse", quantity: 2, price: 29.99 }
+        ],
+        total: 1059.97,
+        status: "completed",
+        order_date: new Date()
+      },
+      {
+        user_email: "jane.smith@example.com",
+        products: [
+          { name: "Office Chair", quantity: 1, price: 299.99 },
+          { name: "Desk Lamp", quantity: 1, price: 49.99 }
+        ],
+        total: 349.98,
+        status: "pending",
+        order_date: new Date()
+      }
+    ]);
+    
+    // Create indexes for better query performance
+    db.users.createIndex({ email: 1 }, { unique: true });
+    db.products.createIndex({ category: 1 });
+    db.orders.createIndex({ user_email: 1 });
+    
+    print('Sample database initialized successfully!');
+    print('Collections created: users, products, orders');
+    print('Total users: ' + db.users.countDocuments());
+    print('Total products: ' + db.products.countDocuments());
+    print('Total orders: ' + db.orders.countDocuments());

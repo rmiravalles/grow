@@ -1,0 +1,53 @@
+# Default values for mongodb chart
+
+# MongoDB image configuration
+image:
+  repository: mongo
+  tag: "7.0"
+  pullPolicy: IfNotPresent
+
+# MongoDB credentials
+auth:
+  username: admin
+  password: password123
+  database: sampledb
+
+# Service configuration
+service:
+  type: NodePort
+  port: 27017
+  
+  # NodePort configuration (only used if type is NodePort)
+  nodePort:
+    enabled: true
+    port: 30017
+
+# Persistent storage configuration
+persistence:
+  enabled: true
+  storageClass: ""  # Use default StorageClass if empty
+  accessMode: ReadWriteOnce
+  size: 5Gi
+
+# Resource limits and requests
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+# Replica count
+replicaCount: 1
+
+# Sample data initialization
+sampleData:
+  enabled: true
+  # You can customize the initialization script in templates/configmap.yaml
+
+# Labels to add to all resources
+labels: {}
+
+# Annotations to add to all resources
+annotations: {}

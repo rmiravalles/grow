@@ -136,6 +136,42 @@ I was unable to connect to the dashboard at `http://localhost:9000/dashboard/`.
 I still can't figure out where the problem is. I'll keep investigating and update this reflection when I find the solution.
 
 ---
+### A complete change in direction
+
+So, after a lot of attempts and dead-ends, I decided to go with the Kind solution. I had never used Kind before, so it's also a good chance to learn it.
+
+This is the config file I used to spin-up my Kind cluster.
+
+```yml
+# kind-config.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  # Control plane node
+  - role: control-plane
+    kubeadmConfigPatches:
+    - |
+      kind: InitConfiguration
+      nodeRegistration:
+        kubeletExtraArgs:
+          node-labels: "ingress-ready=true"
+    extraPortMappings:
+    - containerPort: 80
+      hostPort: 80
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 443
+      protocol: TCP
+  
+  # Worker node 1
+  - role: worker
+  
+  # Worker node 2
+  - role: worker
+```
+
+
+
 
 ## ❓ What Was Challenging
 
