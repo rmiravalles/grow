@@ -354,7 +354,7 @@ I added Mr. Jimmy James to the list of users. This is how it looks like.
 
 ![compass](../assets/compass.png)
 
-After the Pod restarted, I used the MongoDB Shell to check the contents of my Database.
+After the Pod restarted, I used the [MongoDB Shell](https://www.mongodb.com/try/download/shell) to check the contents of my Database.
 
 ![shell](../assets/mongodbshell.png)
 
