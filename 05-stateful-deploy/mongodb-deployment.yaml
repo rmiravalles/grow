@@ -21,12 +21,12 @@ spec:
         - containerPort: 27017
           name: mongodb
         env:
-        - name: MONGODB_USERNAME
+        - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
               name: mongodb-secret
               key: username
-        - name: MONGODB_PASSWORD
+        - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb-secret

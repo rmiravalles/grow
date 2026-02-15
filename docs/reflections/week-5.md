@@ -94,7 +94,7 @@ stringData:
   password: password123
 ```
 
-I learned that these secrets are simply encoded, and anybody can decoded it. These secrets aren't encrypted. In the end, we can't rely on base64 encoding for protection.
+I learned that these secrets are simply encoded, and anybody can decoded it. These secrets aren't encrypted. In the end, we can't rely on base64 encoding for protection. What I did here was to add the Secret file to `.gitignore`, but this still isn't the most secure way to do it.
 
 ## The PVC
 
@@ -114,7 +114,7 @@ spec:
   # storageClassName: standard  # Uncomment if you need to specify a StorageClass
 ```
 
-To inspect the newly created, I ran the `kubectl describe` command.
+To inspect the newly created PVC, I ran the `kubectl describe` command.
 
 ```bash
 kubectl describe pvc mongodb-pvc
@@ -278,12 +278,12 @@ spec:
         - containerPort: 27017
           name: mongodb
         env:
-        - name: MONGO_INITDB_ROOT_USERNAME
+        - name: MONGODB_USERNAME
           valueFrom:
             secretKeyRef:
               name: mongodb-secret
               key: username
-        - name: MONGO_INITDB_ROOT_PASSWORD
+        - name: MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb-secret
@@ -346,9 +346,7 @@ I first port-forwarded the service, so I could connect to it.
 kubectl port-forward service/mongodb-nodeport 27017:27017
 ```
 
-Then, from the browser, I navigated to this address: `mongodb://admin:password123@localhost:27017/sampledb?authSource=admin`
-
-A pop-up window prompted me to open Compass.
+Then, from within the Compass application, I connected to the database with the username and password. I tried to build the connection string with environment variables that store the credentials, but it kept failing. For the time being, if I want to use Compass, I'll do it like this, from the Advanced Connection Options.
 
 I added Mr. Jimmy James to the list of users. This is how it looks like.
 
@@ -356,19 +354,37 @@ I added Mr. Jimmy James to the list of users. This is how it looks like.
 
 After the Pod restarted, I used the [MongoDB Shell](https://www.mongodb.com/try/download/shell) to check the contents of my Database.
 
-From my terminal, I ran this command.
+To interact with the database from my shell, I tried two options. First, I connected to the deployment with this command.
 
 ```bash
-kubectl exec -it deployment/mongodb -- mongosh -u $(MONGODB_USERNAME) -p $(MONGODB_PASSWORD) --authenticationDatabase admin
+kubectl exec -it deployment/mongodb -- \
+  mongosh --username $(kubectl get secret mongodb-secret -o jsonpath='{.data.username}' | base64 -d) --password $(kubectl get secret mongodb-secret -o jsonpath='{.data.password}' | base64 -d) --authenticationDatabase admin
+```
+
+The second approach was to connect directly to the database with `mongosh`. For this, I had to port-forward. First, I stored the credentials as environment variables.
+
+```bash
+export MONGO_USER=$(kubectl get secret mongodb-secret -o jsonpath='{.data.username}' | base64 -d)
+export MONGO_PASS=$(kubectl get secret mongodb-secret -o jsonpath='{.data.password}' | base64 -d)
+```
+
+I then connected to the database.
+
+```bash
+mongosh --host localhost --port 27017 --username "$MONGO_USER" --password "$MONGO_PASS" --authenticationDatabase admin
 ```
 
 ![shell](../assets/mongodbshell.png)
 
 And there is Mr. Jimmy James!
 
+---
+
 ## But there's more!
 
-I want to go back here and add more reflections.
+I want to go back here and add more reflections. I need to dive deeper into secrets management and best practices in real-life production environments. I'll try to reproduce them here.
+
+Take it easy!
 
 
 
