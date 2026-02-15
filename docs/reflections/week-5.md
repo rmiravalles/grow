@@ -80,7 +80,7 @@ Look for `volume`.
 
 ## Using secrets
 
-To add a bit more complexity to the already complex lab, I decided to add a `Secret` object, to store the Database credentials. I still don't know much about secrets and how to handle them. So bear with me here.
+To add some security, I decided to add a `Secret` object, to store the Database credentials. I created the Secret object, as described in the file below.
 
 ```yml
 apiVersion: v1
@@ -94,7 +94,7 @@ stringData:
   password: password123
 ```
 
-These secrets aren't actually secret. 😃
+I learned that these secrets are simply encoded, and anybody can decoded it. These secrets aren't encrypted. In the end, we can't rely on base64 encoding for protection.
 
 ## The PVC
 
@@ -355,6 +355,12 @@ I added Mr. Jimmy James to the list of users. This is how it looks like.
 ![compass](../assets/compass.png)
 
 After the Pod restarted, I used the [MongoDB Shell](https://www.mongodb.com/try/download/shell) to check the contents of my Database.
+
+From my terminal, I ran this command.
+
+```bash
+kubectl exec -it deployment/mongodb -- mongosh -u $(MONGODB_USERNAME) -p $(MONGODB_PASSWORD) --authenticationDatabase admin
+```
 
 ![shell](../assets/mongodbshell.png)
 
