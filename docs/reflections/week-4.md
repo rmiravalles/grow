@@ -232,7 +232,7 @@ The second problem was that the Traefik Service was of type `LoadBalancer`. I di
 
 ## What is hostPort?
 
-In the Traefik Pod port configuration, I added `hostPort` to expose the necessary ports on the control-plane node's network interface.
+In the Helm Values, I added the entries below to expose the necessary ports on the control-plane node's network interface. This is documented in the Traefik Helm chart, but I didn't understand it completely. I think it maps to the Service. Any ideas here?
 
 Take a look at this snippet.
 
