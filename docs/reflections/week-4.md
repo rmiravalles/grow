@@ -120,9 +120,9 @@ curl localhost:8080
 
 I made a tiny change to the `index.html` file here.
 
-## ✅ Deploying the Ingress
+## ✅ Deploying the Ingress Controller
 
-Since the NGINX Ingress Controller is being retired, I decided to deploy Traefik as my Ingress Controller for this exercise.
+Since the NGINX Ingress Controller is being retired, I decided to deploy Traefik as my Ingress Controller for this exercise. And here is where I ran into a lot of issues. I'll do my best to explain the root causes and the changes I made to fix them.
 
 ### Deploying the Traefik Ingress controller using Helm
 
@@ -137,113 +137,27 @@ helm repo update
 
 #### Installing Traefik
 
-I did some research on installing Traefik in a Kind cluster, and I found that, because Kind runs in Docker, I'd need to configure port mappings.
-
-I did it in this `traefik-values.yaml` file.
-
-```yml
-service:
-  type: NodePort
-ports:
-  web:
-    nodePort: 30080
-    exposedPort: 80
-  websecure:
-    nodePort: 30443
-    exposedPort: 443
-```
-
-I then installed it with the following command.
+I didn't go too deep here, and I ended up with an installation that didn't work. This is the first installation command I ran:
 
 ```bash
 helm install traefik traefik/traefik \
   --namespace traefik \
   --create-namespace \
-  --values traefik-values.yaml
+  --set ports.web.nodePort=30080 \
+  --set ports.websecure.nodePort=30443
 ```
 
-To verify that all resources were installed, I run a `kubectl get all -n traefik`.
-
-![kubectl get all -n traefik](../assets/k-get-all-traefik.png)
-
-
-
-
-
-
-
-
-
-
-
-
-Here, however, I hit a roadblock.
-
-I adapted the provided `web-ingress.yaml` file by adding these lines to the `metadata.annotations` section:
-
-```yaml
-kubernetes.io/ingress.class: traefik
-traefik.ingress.kubernetes.io/router.entrypoints: web
-```
-
-When I applied the Ingress resource, I got a warning message that said that the annotation `kubernetes.io/ingress.class` is deprecated in favor of the `spec.ingressClassName` field. The resource was created, though. I updated the `web-ingress.yaml` file to include the `ingressClassName` field, but I left the annotations there.
-
-I updated the `/etc/hosts` file with the following command:
+It all looked good at first. The Traefik Pod was running, and the Service was created. However, when I tried to access the host `demo.example.com`, I got the error below.
 
 ```bash
-echo "127.0.0.1 web.example.com" | sudo tee -a /etc/hosts
+curl: (56) Recv failure: Connection reset by peer
 ```
 
-It didn't work. A `curl http://web.example.com` command returned a "Couldn't connect to server" error.
+It took me time to figure out this error, because apparently, everything looked good.
 
-### Troubleshooting
-
-To troubleshoot, I first checked if the Traefik Pod was running with the command:
-
-```bash
-kubectl get pods -n kube-system -l app.kubernetes.io/name=traefik
-```
-
-The output showed that it was indeed running.
-
-I then checked the Traefik service with:
-
-```bash
-kubectl get svc -n kube-system -l app.kubernetes.io/name=traefik
-```
-
-The output showed that there's a service named `traefik` of type `LoadBalancer`.
-
-![Traefik Service and Pod](../assets/traefik-kube-system.png)
-
-This is what I see when I describe the Ingress resource:
-
-```bash
-kubectl describe ingress web-ingress
-```
-
-![Describe Ingress Output](../assets/k-describe-ingress.png)
-
-I then added those IP addresses that I found in the `EXTERNAL-IP` column of the Traefik service to my `/etc/hosts` file, but it still didn't work.
-
-Finally, I tried to access the Traefik dashboard by port-forwarding to the Traefik Pod:
-
-```bash
-kubectl port-forward -n kube-system $(kubectl get pods -n kube-system -l app.kubernetes.io/name=traefik -o name) 9000:9000
-```
-I was unable to connect to the dashboard at `http://localhost:9000/dashboard/`.
-
-I still can't figure out where the problem is. I'll keep investigating and update this reflection when I find the solution.
-
----
-### A complete change in direction
-
-So, after a lot of attempts and dead-ends, I decided to go with the Kind solution. I had never used Kind before, so it's also a good chance to learn it.
-
-This is the config file I used to spin-up my Kind cluster.
+The first problem here was that the Traefik Pod was scheduled on a worker node instead of the control-plane node. In my Kind cluster, only the control-plane node has the `extraPortMappings` configured. This is my Kind cluster configuration file.
 
 ```yml
-# kind-config.yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -270,108 +184,139 @@ nodes:
   - role: worker
 ```
 
+I guess I could add these `extraPortMappings` to the worker nodes as well. This is something to be investigated.
 
+I created a `traefik-values.yaml`, like so:
 
+```yml
+service:
+  type: ClusterIP
 
-## ❓ What Was Challenging
+ports:
+  web:
+    exposedPort: 80
+    hostPort: 80
+  websecure:
+    exposedPort: 443
+    hostPort: 443
 
-- To check the available Ingress classes in the cluster, I had to run `kubectl get ingressclasses` and look for the `NAME` column. In my case, it was `traefik`.
-- To check if Traefik is running: `kubectl get pods -n kube-system -l app.kubernetes.io/name=traefik`
+# Schedule Traefik on the control-plane node
+nodeSelector:
+  ingress-ready: "true"
 
----
+# Allow scheduling on control-plane (has NoSchedule taint)
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Equal
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    effect: NoSchedule
+```
 
-## 🧪 Commands I Practiced
+To allow scheduling Traefik on the control-plane node, I added a `nodeSelector` that matches the label `ingress-ready=true`. This label was added to the control-plane node in the Kind configuration file. The `tolerations` section allows Traefik to be scheduled on the control-plane node, which has a `NoSchedule` taint by default.
+
+This is something you should be aware of when working with multi-node clusters. This happened to me before, when experimenting with K3D some time ago. If you simply deploy the workloads without specifically targeting the node you want, you might end up with workloads running on nodes that don't have the necessary configurations. So, always pay attention to it, and rely on `nodeSelector` and `tolerations` to ensure your workloads are scheduled on the right nodes.
+
+To update the Traefik installation with the new values file, I ran the following command:
 
 ```bash
-
+helm upgrade traefik traefik/traefik \
+  --namespace traefik \
+  --values traefik-values.yaml
 ```
 
----
+### The Traefik Service
 
-## 🌐 Concepts I Better Understand Now
+The second problem was that the Traefik Service was of type `LoadBalancer`. I didn't define it anywhere. It was deployed like that by default, I suppose. I had to change it to `ClusterIP`.
 
-- 
+## What is hostPort?
 
----
+In the Traefik Pod port configuration, I added `hostPort` to expose the necessary ports on the control-plane node's network interface.
 
-## 💡 How I Might Use This in the Real World
+Take a look at this snippet.
 
-- 
-
----
-
-## 📝 Questions I Still Have
-
-- 
-
----
-
-## 📎 Related Files
-
-### web-pod.yaml
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: web
-  labels:
-    app: web
-spec:
-  containers:
-    - name: web
-      image: nginx
-      ports:
-        - containerPort: 80
+```yml
+ports:
+  web:
+    exposedPort: 80
+    hostPort: 80
+  websecure:
+    exposedPort: 443
+    hostPort: 443
 ```
 
-### web-service.yaml
+### HTTP Entry Point (web)
 
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: web
-spec:
-  selector:
-    app: web
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
+| Parameter | Description |
+|-----------|-------------|
+| `web` | Traefik's name for the HTTP entry point. |
+| `exposedPort: 80` | The port inside the Traefik container where it listens for HTTP traffic.<br>This is the container-level port that Traefik binds to.<br>Applications inside the cluster use this port to reach Traefik. |
+| `hostPort: 80` | Binds the container's port directly to the node's network interface on port 80.<br>This makes port 80 on the host node forward traffic to port 80 in the Traefik pod.<br>Bypasses Kubernetes Service networking - traffic goes straight from node → pod. |
+
+### HTTPS Entry Point (websecure)
+
+| Parameter | Description |
+|-----------|-------------|
+| `websecure` | Traefik's name for the HTTPS entry point. |
+| `exposedPort: 443` | Container listens on port 443 for HTTPS traffic. |
+| `hostPort: 443` | Binds to port 443 on the host node. |
+
+### How hostPort Works
+
+The `hostPort` creates a direct binding from the Node's network stack to the Pod.
+
 ```
+Traffic Flow:
+localhost:80 
+  → Kind extraPortMappings (forwards to control-plane node)
+    → Node's port 80 (hostPort binding)
+      → Traefik pod's port 80 (exposedPort)
+        → Backend services
+``` 
 
-### web-ingress.yaml
+## Deploying the Ingress Resource
 
-```yaml
+After deploying Traefik, I created an Ingress resource to route traffic to the `demo` Service. Here's the YAML manifest for the Ingress.
+
+```yml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-ingress
-  namespace: default
-  annotations:
-    # Specify Traefik as the ingress controller
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+  name: demo-ingress
 spec:
+  ingressClassName: traefik
   rules:
-  - host: web.example.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: web
-            port:
-              number: 80
+    - host: demo.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: demo
+                port:
+                  number: 80
 ```
 
----
+The file you see above was updated. When I applied the Ingress resource, according to the one in the lab, I got a warning message that said that the annotation `kubernetes.io/ingress.class` is deprecated in favor of the `spec.ingressClassName` field. The resource was created, though. I updated the `web-ingress.yaml` file to include the `ingressClassName` field.
 
-## 🚀 What's Next
+I updated the `/etc/hosts` file with the following command:
 
-Try deploying a second app and routing it through the same Ingress controller using a different path like `/v2`.
+```bash
+echo "127.0.0.1 web.example.com" | sudo tee -a /etc/hosts
+```
 
-Or submit your own Week 5 lab idea as a PR!
+### cURL success!
+
+Now I can finally cURL the host `demo.example.com` and get a successful response.
+
+```bashbash
+curl demo.example.com
+```
+
+![curl demo.example.com](../assets/curl-success.png)
+
+It took me a while to get here, but it was worth it. I learned a lot about how Ingress works, and how to troubleshoot issues with Ingress controllers. I also got to experiment with Traefik, which is a great alternative to NGINX.
+
+It was a very exciting journey!
