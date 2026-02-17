@@ -147,7 +147,7 @@ helm install traefik traefik/traefik \
   --set ports.websecure.nodePort=30443
 ```
 
-It all looked good at first. The Traefik Pod was running, and the Service was created. However, when I tried to access the host `demo.example.com`, I got the error below.
+It all looked good at first. The Traefik Pod was running, and the Service was created. However, when I tried to access the host `demo.example.com` (check below), I got the error below.
 
 ```bash
 curl: (56) Recv failure: Connection reset by peer
