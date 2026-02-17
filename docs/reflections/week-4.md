@@ -232,7 +232,7 @@ The second problem was that the Traefik Service was of type `LoadBalancer`. I di
 
 ## What is hostPort?
 
-In the Helm Values, I added the entries below to expose the necessary ports on the control-plane node's network interface. This is documented in the Traefik Helm chart, but I didn't understand it completely. I think it maps to the Service. Any ideas here?
+In the Helm Values, I added the entries below to expose the necessary ports on the control-plane node's network interface. This is mentioned in the Traefik Helm chart documentation, and it says we shouldn't do it in production.
 
 Take a look at this snippet.
 
@@ -304,14 +304,14 @@ The file you see above was updated. When I applied the Ingress resource, accordi
 I updated the `/etc/hosts` file with the following command:
 
 ```bash
-echo "127.0.0.1 web.example.com" | sudo tee -a /etc/hosts
-```
+echo "127.0.0.1 demo.example.com" | sudo tee -a /etc/hosts
+```    
 
 ### cURL success!
 
 Now I can finally cURL the host `demo.example.com` and get a successful response.
 
-```bashbash
+```bash
 curl demo.example.com
 ```
 
