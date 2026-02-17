@@ -133,7 +133,7 @@ To use another cool tool, I decided to use Helm to deploy the Traefik Ingress Co
 ```bash
 helm repo add traefik https://traefik.github.io/charts
 helm repo update
- ```
+```
 
 #### Installing Traefik
 
