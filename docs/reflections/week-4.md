@@ -28,26 +28,35 @@ It's essentially a built-in **load balancer with automatic service discovery** -
 
 ### Types of Services
 
-- **ClusterIP**: The default type. Exposes the Service on a cluster-internal IP. Only accessible within the cluster.
-- **NodePort**: Exposes the Service on a static port on each node's IP. Accessible from outside the cluster using `<NodeIP>:<NodePort>`.
-- **LoadBalancer**: Provisions an external load balancer (if supported by the cloud provider) and assigns a public IP to the Service. Accessible from outside the cluster.
+#### ClusterIP
+
+This exposes the Service on an internal IP within the cluster. It's only accessible from within the cluster itself. This is useful for internal communication between your Pods - for example, when your frontend needs to talk to your backend, or your application needs to reach a database.
+
+#### NodePort
+
+This exposes the Service on each Node's IP at a static port (the NodePort). It automatically creates a ClusterIP Service as well. You can then access the Service from outside the cluster by requesting `<NodeIP>:<NodePort>`. The port range is typically **30000-32767**. This is commonly used for development or when you need simple external access without a load balancer.
+
+#### LoadBalancer
+
+This exposes the Service externally using a cloud provider's load balancer (like AWS ELB, GCP Load Balancer, or Azure Load Balancer). It automatically creates NodePort and ClusterIP Services as well. This is the standard way to expose services to the internet in production cloud environments, as it provisions an actual external load balancer with a public IP.
+
 
 ## Ingress
 
-While Services expose your app internally within the cluster, Ingress is like a traffic cop that manages how external users access your services. It provides rules for routing external HTTP and HTTPS traffic to the right Service based on the request's host or path.
+An Ingress is a Kubernetes resource that defines rules for routing external `HTTP/HTTPS` traffic to Services inside your cluster. Think of it as a set of routing rules that say "if someone requests `myapp.com/api`, send them to the `API` Service" or "if someone requests `myapp.com/blog`, send them to the `blog` Service."
 
-### How it works
+### Key features of Ingress:
 
-When you set up an Ingress, you define rules that say things like:
-
-- "If the request is for `web.example.com`, send it to the `web` Service."
-- "If the request is for `api.example.com`, send it to the `api` Service."
-- "You can also specify path-based routing, like sending requests to `web.example.com/v2` to a different Service."
-- "Additionally, Ingress can handle SSL/TLS termination, meaning it can manage HTTPS connections and forward them as HTTP to your Services."
+- **Host-based routing**: Route traffic based on domain names (api.example.com vs app.example.com)
+- **Path-based routing**: Route based on URL paths (/api, /admin, /shop)
+- **TLS/SSL termination**: Handle HTTPS certificates in one place
+- **Single entry point**: One external IP/LoadBalancer for multiple Services
 
 ### Ingress Controllers
 
-To make Ingress work, you need an Ingress Controller. This is a special type of load balancer that watches for Ingress resources and configures itself to route traffic according to the rules you defined. Popular Ingress Controllers include NGINX, Traefik, and HAProxy.
+An Ingress Controller is the actual implementation that reads your Ingress rules and makes them work. It's a Pod running in your cluster that acts as a reverse proxy and load balancer. Popular Ingress Controllers include **NGINX**, **Traefik**, and **HAProxy**.
+
+> Unlike other Kubernetes resources, Ingress doesn't work automatically - you must install an Ingress Controller first, otherwise your Ingress rules just sit there doing nothing.
 
 ### Notes on the NGINX Ingress Controller retirement
 
@@ -57,25 +66,116 @@ Kubernetes SIG Network and the Security Response Committee have announced the up
 
 Traefik is a popular alternative for managing Ingress in Kubernetes. Traefik offers dynamic configuration, built-in support for Let's Encrypt, and seamless integration with Kubernetes. It also provides features like path rewriting through Middlewares, which can be used to manipulate request paths as needed.
 
-In K3s, Traefik is the default Ingress Controller, so if you're using K3s, you can take advantage of Traefik's features without needing to set up an additional Ingress Controller.
-
 
 ## ✅ Deploying the Pod and Service
 
-For the exercise, I deployed a Pod running NGINX with the YAML file provided. The file can be found below, in the "Related Files" section.
+For the exercise, I created a Deployment, instead of a single Pod. Here's the YAML manifest for the Deployment.
 
-Then, I created a Service of type ClusterIP to expose the Pod internally. This allows other components within the cluster to communicate with the web application without needing to know the specific IP address of the Pod.
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+I then created a Service of type `ClusterIP`.
+
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: demo
+  type: ClusterIP
+```
 
 To test the Service, I used `kubectl port-forward` to forward a local port to the Service's port. This way, I could access the web application running in the cluster from my local machine using `curl`. The commands I used were:
 
 ```bash
 kubectl port-forward svc/web 8080:80
-curl http://localhost:8080
+curl localhost:8080
 ```
+
+![curl localhost](../assets/curl-localhost.png)
+
+I made a tiny change to the `index.html` file here.
 
 ## ✅ Deploying the Ingress
 
-Since the NGINX Ingress Controller is being retired, I decided to deploy Traefik as my Ingress Controller for this exercise. K3D, which runs K3S under the hood, comes with Traefik pre-installed, so I didn't need to set it up separately.
+Since the NGINX Ingress Controller is being retired, I decided to deploy Traefik as my Ingress Controller for this exercise.
+
+### Deploying the Traefik Ingress controller using Helm
+
+To use another cool tool, I decided to use Helm to deploy the Traefik Ingress Controller. This is how I did it.
+
+#### Adding the Traefik Helm repository.
+
+```bash
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+ ```
+
+#### Installing Traefik
+
+I did some research on installing Traefik in a Kind cluster, and I found that, because Kind runs in Docker, I'd need to configure port mappings.
+
+I did it in this `traefik-values.yaml` file.
+
+```yml
+service:
+  type: NodePort
+ports:
+  web:
+    nodePort: 30080
+    exposedPort: 80
+  websecure:
+    nodePort: 30443
+    exposedPort: 443
+```
+
+I then installed it with the following command.
+
+```bash
+helm install traefik traefik/traefik \
+  --namespace traefik \
+  --create-namespace \
+  --values traefik-values.yaml
+```
+
+To verify that all resources were installed, I run a `kubectl get all -n traefik`.
+
+![kubectl get all -n traefik](../assets/k-get-all-traefik.png)
+
+
+
+
+
+
+
+
+
+
+
 
 Here, however, I hit a roadblock.
 
