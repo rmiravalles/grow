@@ -1,6 +1,15 @@
 service:
   type: ClusterIP
 
+api:
+  dashboard: true
+
+ingressRoute:
+  dashboard:
+    enabled: true
+    entryPoints:
+      - web
+
 ports:
   web:
     exposedPort: 80

@@ -228,11 +228,15 @@ helm upgrade traefik traefik/traefik \
 
 ### The Traefik Service
 
-The second problem was that the Traefik Service was of type `LoadBalancer`. I didn't define it anywhere. It was deployed like that by default, I suppose. I had to change it to `ClusterIP`.
+The second problem was that the Traefik Service was of type `LoadBalancer`. I didn't define it anywhere. It was deployed like that by default, I suppose. I had to change it to `ClusterIP` in the `traefik-values.yaml` file.
+
+This is the beauty of using Helm. You can easily customize the deployment by providing a values file, and then you can update the installation with a single command. This is much easier than having to edit the YAML manifests directly and reapplying them.
+
+If you want to dive deeper into the Traefik Helm chart, you can visit the [GitHub repository](https://github.com/traefik/traefik-helm-chart) that contans the chart. It's a good idea to explore the `values.yaml` file to understand all the configurable options available for Traefik.
 
 ## What is hostPort?
 
-In the Helm Values, I added the entries below to expose the necessary ports on the control-plane node's network interface. This is mentioned in the Traefik Helm chart documentation, and it says we shouldn't do it in production.
+In the Helm Values, I added the entries below to expose the necessary ports on the control-plane node's network interface. This is Traefik specific stuff. You can see it mentioned in the Traefik Helm chart documentation (linked above), and it says we shouldn't do it in production.
 
 Take a look at this snippet.
 
@@ -317,6 +321,58 @@ curl demo.example.com
 
 ![curl demo.example.com](../assets/curl-success.png)
 
+## UPDATE: Enabling the Traefik Dashboard
+
+I wanted to give this Traefik Dashboard a try, but I got the same error connection reset error as before. I wanted it very badly, so I had to press on with the investigation. I then found this [reference](https://doc.traefik.io/traefik/reference/install-configuration/api-dashboard/) in the Traefik documentation that explains how to enable the dashboard. I updated the `traefik-values.yaml` file to enable the dashboard, and then I updated the Helm installation with a `helm upgrade`.
+
+This is the new `traefik-values.yaml` file with the dashboard enabled.
+
+```yml
+service:
+  type: ClusterIP
+
+# Enable Traefik dashboard
+api:
+  dashboard: true
+
+ingressRoute:
+  dashboard:
+    enabled: true
+    entryPoints:
+      - web
+
+ports:
+  web:
+    exposedPort: 80
+    hostPort: 80
+  websecure:
+    exposedPort: 443
+    hostPort: 443
+
+# Schedule Traefik on the control-plane node (required for Kind)
+nodeSelector:
+  ingress-ready: "true"
+
+# Allow scheduling on control-plane (has NoSchedule taint)
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Equal
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    effect: NoSchedule
+```
+
+And this is how it looks like when I access it at `http://localhost/dashboard`.
+
+![Traefik Dashboard](../assets/traefik-dashboard.png)
+
+Super cool!
+
+## Conclusion
+
 It took me a while to get here, but it was worth it. I learned a lot about how Ingress works, and how to troubleshoot issues with Ingress controllers. I also got to experiment with Traefik, which is a great alternative to NGINX.
+
+I'm also glad I got to use Helm to deploy Traefik. It made the deployment process much easier, and it allowed me to easily customize the installation with a values file.
 
 It was a very exciting journey!
