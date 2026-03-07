@@ -8,7 +8,7 @@ To use network policies, you need to have a CNI plugin that supports them. Calic
 
 ## Install Calico
 
-Resource: https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+Resource: [Calico Quick Start Guide](https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart)
 
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.3/manifests/tigera-operator.yaml
