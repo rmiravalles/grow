@@ -1,6 +1,6 @@
 # Week 2 Reflection – GitOps with FluxCD
 
-This week, I set up GitOps in my Kubernetes cluster using **FluxCD**. I bootstrapped my own repository, created a Git source and a Kustomization, and learned how declarative workflows can automate and standardize Kubernetes operations.
+This week, I set up GitOps in my Kind Kubernetes cluster using [FluxCD](https://fluxcd.io/). I bootstrapped a new repository for this lab, called [Hello GitOps](https://github.com/rmiravalles/hello-gitops), which contains a simple FastAPI application that serves two different versions of the app, to simulate different environments (dev and prod).
 
 ---
 
@@ -59,18 +59,9 @@ graph TB
     classDef pullAction fill:#ffffcc,stroke:#ff6600,stroke-width:2px,stroke-dasharray: 5 5
 ```
 
-## Installing FluxCD
+## The Exercise
 
-I installed FluxCD using the CLI and bootstrapped my GitHub repository. This process set up all necessary components in my cluster and connected it to my Git repository.
-
-```bash
-flux bootstrap github \
-  --owner=rmiravalles \
-  --repository=grow \
-  --branch=main \
-  --path=./clusters/grow \
-  --personal
-```
+For this exercise, I created a new Git repository called [Hello GitOps](https://github.com/rmiravalles/hello-gitops) and set up FluxCD to manage the deployment of a simple FastAPI application.
 
 ---
 
@@ -110,15 +101,6 @@ flux bootstrap github \
 - 
 - 
 -
-
-
----
-
-## 📎 Related Files
-
-- `clusters/dev/kustomization.yaml`
-- `.flux.yaml` (if applicable)
-- GitHub repository path and bootstrap settings
 
 ---
 

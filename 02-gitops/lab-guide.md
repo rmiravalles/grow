@@ -43,7 +43,7 @@ flux bootstrap github \
   --owner=rmiravalles \
   --repository=grow \
   --branch=main \
-  --path=./clusters/grow \
+  --path=./clusters/kind \
   --personal
 ```
 
