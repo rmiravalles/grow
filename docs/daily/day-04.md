@@ -1,10 +1,10 @@
-# Network policies
+## Network policies
 
 Network policies are a Kubernetes resource that allow you to control the flow of traffic between Pods and other network endpoints. They are implemented by the cluster's network plugin (like Calico) and provide a way to enforce security and segmentation within the cluster.
 
-## CNI plugin and network policies
+## CNI
 
-To use network policies, you need to have a CNI plugin that supports them. Calico is a popular choice for Kubernetes clusters.
+CNI (Container Network Interface) is a specification for configuring network interfaces in Linux containers. Kubernetes uses CNI plugins to manage the network connectivity of Pods. To use network policies, you need to have a CNI plugin that supports them. Calico is a popular choice for Kubernetes clusters.
 
 ## Install Calico
 
@@ -137,9 +137,9 @@ kubectl logs -n calico-system deploy/whisker -c whisker-backend --tail=50
 After that, generate in-cluster traffic (for example `client -> web`) and refresh Whisker.
 
 
-# The exercise
+## The exercise
 
-## Deploy two communicating Pods
+### Deploy two communicating Pods
 
 ```bash
 # web server
@@ -148,8 +148,6 @@ kubectl run web --image=nginx --labels="app=web" --port=80
 # client
 kubectl run client --image=busybox --labels="app=client" --command -- sleep 3600
 ```
-
-## Test connectivity
 
 ### Direct Pod-to-Pod connectivity test
 
@@ -192,7 +190,7 @@ Key reasons:
 
 > Direct Pod-IP testing is still useful for low-level debugging, but Service-based testing is the correct default for normal app communication.
 
-## Network policy lockout
+### Network policy lockout
 
 ```YAML
 apiVersion: networking.k8s.io/v1
@@ -268,7 +266,7 @@ Important nuance:
 - NetworkPolicy is namespace-scoped, but it controls the selected Pod’s traffic to any destination, including other namespaces.
 - So even though CoreDNS is in `kube-system`, your Pod still cannot reach it.
 
-## Allowing DNS
+### Allowing DNS
 
 ```yml
 apiVersion: networking.k8s.io/v1
@@ -291,7 +289,7 @@ spec:
 
 This policy allows all Pods in the namespace to send UDP traffic to port 53 on any Pod in the `kube-system` namespace. Reaching the `web` Pod will still fail because we haven't allowed that traffic yet.
 
-## Allowing traffic to web
+### Allowing traffic to web
 
 ```yaml
 apiVersion: networking.k8s.io/v1
