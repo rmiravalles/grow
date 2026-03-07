@@ -20,7 +20,6 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.3
 # Monitor the installation
 watch kubectl get tigerastatus
 ```
----
 
 I had an issue with the installation, and I had to fix it by patching the default Calico Installation IPPool CIDR to match the cluster pod CIDR.
 
