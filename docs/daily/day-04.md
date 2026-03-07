@@ -314,7 +314,7 @@ spec:
 
 Still fails because the client cannot make egress connections yet.
 
-## Allowing client egress to web
+### Allowing client egress to web
 
 ```yaml
 apiVersion: networking.k8s.io/v1
