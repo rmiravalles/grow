@@ -1,6 +1,6 @@
 # Network policies
 
-Netwrork policies are a Kubernetes resource that allow you to control the flow of traffic between Pods and other network endpoints. They are implemented by the cluster's network plugin (like Calico) and provide a way to enforce security and segmentation within the cluster.
+Network policies are a Kubernetes resource that allow you to control the flow of traffic between Pods and other network endpoints. They are implemented by the cluster's network plugin (like Calico) and provide a way to enforce security and segmentation within the cluster.
 
 ## CNI plugin and network policies
 
@@ -11,31 +11,18 @@ To use network policies, you need to have a CNI plugin that supports them. Calic
 Resource: [Calico Quick Start Guide](https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart)
 
 ```bash
+# Install the Tigera operator and CRDs
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.3/manifests/tigera-operator.yaml
-```
 
-```bash
+# Install Calico components and custom resources
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.3/manifests/custom-resources.yaml
-```
 
-```bash
 # Monitor the installation
 watch kubectl get tigerastatus
 ```
+---
 
-## Monitor network traffic in Calico Whisker
-
-Calico Whisker is a tool that provides visibility into network traffic in a Calico-enabled Kubernetes cluster. It allows you to see which Pods are communicating with each other and what protocols they are using.
-
-```bash
-kubectl port-forward -n calico-system service/whisker 8081:8081
-```
-
-After running the above command, you can access the Whisker UI by navigating to `http://localhost:8081` in your web browser.
-
-I can see it's up and running, but I still not to explore it in depth, and understand how it works. I'm not seeing anything yet. It looks like it's not recognizing my cluster.
-
-But now let's rewind a bit and see what happened with the installation. I had an issue with the installation, and I had to fix it by patching the default Calico Installation IPPool CIDR to match the cluster pod CIDR.
+I had an issue with the installation, and I had to fix it by patching the default Calico Installation IPPool CIDR to match the cluster pod CIDR.
 
 ## Tigera degraded fix (what changed and why)
 
@@ -106,6 +93,50 @@ kubectl patch installation default --type merge -p '{"spec":{"calicoNetwork":{"i
 # 4) Confirm recovery
 kubectl get tigerastatus
 ```
+
+## Monitor network traffic in Calico Whisker
+
+Calico Whisker is a tool that provides visibility into network traffic in a Calico-enabled Kubernetes cluster. It allows you to see which Pods are communicating with each other and what protocols they are using.
+
+```bash
+kubectl port-forward -n calico-system service/whisker 8081:8081
+```
+
+After running the above command, you can access the Whisker UI by navigating to `http://localhost:8081` in your web browser.
+
+I could see the UI, but it was empty with no traffic. I had to troubleshoot and fix an installation issue before I could see traffic in Whisker. Below is the troubleshooting process I followed to resolve the issue and get Whisker working.
+
+### Whisker shows no traffic (quick troubleshooting)
+
+If the UI opens but stays empty, verify these in order:
+
+```bash
+# 1) Core components must be healthy
+kubectl get tigerastatus
+kubectl get pods -n calico-system
+
+# 2) Check Whisker backend errors (look for DNS timeout to goldmane)
+kubectl logs -n calico-system deploy/whisker -c whisker-backend --tail=100
+
+# 3) Validate DNS rule selector used by Whisker NetworkPolicy
+kubectl get netpol -n calico-system whisker -o yaml
+kubectl get ns kube-system --show-labels
+```
+
+If logs contain errors like
+`lookup goldmane.calico-system.svc.cluster.local on <dns-ip>:53: i/o timeout`,
+the Whisker Pod can be blocked from DNS by a namespace label mismatch.
+
+```bash
+# Fix: add the expected label used by the Whisker DNS egress policy
+kubectl label ns kube-system projectcalico.org/name=kube-system --overwrite
+
+# Re-check backend logs for recovery
+kubectl logs -n calico-system deploy/whisker -c whisker-backend --tail=50
+```
+
+After that, generate in-cluster traffic (for example `client -> web`) and refresh Whisker.
+
 
 # The exercise
 
