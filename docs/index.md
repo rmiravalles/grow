@@ -30,6 +30,7 @@ For my Kubernetes learning environment, I chose to use [K3D](https://k3d.io/), i
 
 - [Day 1: Kubernetes Pod Restart Policies](daily/day-01.md)
 - [Day 2: StatefulSets](daily/day-02.md)
+- [Day 3: Requests, limits and QoS](daily/day-03.md)
 - [Day 4: Network Policies](daily/day-04.md)
 
 
