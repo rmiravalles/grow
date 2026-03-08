@@ -2,7 +2,7 @@
 
 In Kubernetes, you can specify resource requests and limits for your containers to ensure that they have the necessary resources to run effectively while preventing them from consuming too much of the cluster's resources.
 
-Quality of Service (QoS) classes are assigned to Pods based on the resource requests and limits defined for their containers. The QoS class determines the priority of the Pod when it comes to scheduling and eviction under resource pressure.
+[Quality of Service (QoS) classes](https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/) are assigned to Pods based on the resource requests and limits defined for their containers. The QoS class determines the priority of the Pod when it comes to scheduling and eviction under resource pressure.
 
 ## Exceeding memory limits
 
