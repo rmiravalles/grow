@@ -14,14 +14,14 @@ There are three possible values for the `restartPolicy` field:
 
 ## ⚙️ Practical Usage and Context
 
- ### Always (Default for Controllers)
+### Always (Default for Controllers)
  
 - Best for: Long-running applications like web servers, APIs, or stateful services (often managed by Controllers like Deployment, DaemonSet, or StatefulSet).
 - Reasoning: You want the application to always be running. If the container crashes due to a bug or resource issue, Kubernetes automatically attempts to bring it back up to maintain service availability.
 
 > Note: When a Pod is managed by a Controller (like a Deployment), the controller takes over the responsibility of ensuring the desired number of Pods are running. If a container in the Pod repeatedly fails and the Kubelet's restart attempts are limited by an exponential back-off delay, the Controller may choose to terminate the failing Pod and create a brand new Pod to replace it.
  
- ### OnFailure
+### OnFailure
 
 - Best for: Jobs or processes that might encounter recoverable errors but should not be restarted if they complete their task successfully.
 - Reasoning: This is a middle ground. If the container finishes successfully (exit code 0), the job is done. If it fails (non-zero exit code), the Kubelet tries to restart it, assuming the failure might be transient (e.g., a temporary network issue).
