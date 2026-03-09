@@ -2,11 +2,7 @@
 
 This week, I worked through the Kubernetes fundamentals lab where I deployed a basic NGINX web server using both a Pod and a Deployment. I also learned about security contexts and how to scale workloads.
 
-> NOTE: For these exercises, I'm using K3D instead of Kind, since I'm more used to it and it's more lightweight on my machine.
-
 ---
-
-# ✅ What I Learned
 
 ## Pods vs Deployments
 
@@ -189,7 +185,3 @@ spec:
 ```
 
 ---
-
-## 🚀 Looking Ahead
-
-I’m excited to explore GitOps in Week 2 and automate deployments using FluxCD.
