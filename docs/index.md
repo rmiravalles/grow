@@ -6,6 +6,7 @@ My name's Rodrigo, originally from Brazil, and living in Spain for the past 8 ye
 
 Here I'll document my journey through the [KubeSkills GROW program](https://kubeskills.com/grow/) (GitHub Repository of Work). You'll find my notes, reflections, and hands-on exercises, as well as the [Daily Kubeskills challenges](https://daily.kubeskills.com/).
 
+
 I'll do my best to be as consistent as possible.
 
 Under **Reflections** you'll find my weekly summaries, exercises, and insights, as defined in the GROW curriculum. Under **Daily Challenges** you'll find my notes and solutions to the Daily Kubeskills challenges. Since there are many, I'll bundle them by week.
