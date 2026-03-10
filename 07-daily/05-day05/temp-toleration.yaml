@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: temporary-toleration
+spec:
+  tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "gpu"
+    effect: "NoExecute"
+    tolerationSeconds: 30
+  containers:
+  - name: nginx
+    image: nginx
+  nodeSelector:
+    kubernetes.io/hostname: dev-cluster-worker

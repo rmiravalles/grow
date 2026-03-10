@@ -1,4 +1,4 @@
-## Network policies
+# Network policies
 
 Network policies are a Kubernetes resource that allow you to control the flow of traffic between Pods and other network endpoints. They are implemented by the cluster's network plugin (like Calico) and provide a way to enforce security and segmentation within the cluster.
 
