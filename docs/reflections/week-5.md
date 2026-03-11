@@ -66,6 +66,25 @@ spec:
 
 **Automatic Way:** Kubernetes uses a **StorageClass** with a **provisioner** that automatically creates PVs when you create PVCs.
 
+### StorageClasses in practice
+
+A `StorageClass` defines how volumes are created (which driver/provisioner to use and with what settings).
+
+In practice, the flow is:
+
+```text
+PVC with storageClassName -> CSI provisioner creates volume -> PV is created and bound -> Pod mounts PVC
+```
+
+If `storageClassName` is omitted, Kubernetes usually uses the cluster's default StorageClass.
+
+Useful checks:
+
+```bash
+kubectl get storageclass
+kubectl describe pvc mongodb-pvc
+```
+
 If you're using Kind, you can see where the data is stored in you machine, by inspecting the container running the nodes.
 
 ```bash
